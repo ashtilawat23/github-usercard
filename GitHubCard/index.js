@@ -28,7 +28,7 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+// const followersArray = [];
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -58,3 +58,73 @@ const followersArray = [];
     luishrd
     bigknell
 */
+
+
+
+import axios from "axios";
+// console.log(axios); 
+
+const result = axios.get("https://api.github.com/users/ashtilawat23");
+
+// console.log(result);
+
+const followersArray = [];
+followersArray.push('tetondan','dustinmyers','justsml','luishrd','bigknell','ashtilawat23');
+// console.log(followersArray);
+
+const cardEntry = document.querySelector('.cards')
+
+function gitCardMaker(Obj){
+  const div_card = document.createElement('div');
+  const image = document.createElement('img');
+  const div_cardinfo = document.createElement('div');
+  const name = document.createElement('h3');
+  const username = document.createElement('p');
+  const location = document.createElement('p');
+  const profile = document.createElement('p');
+  const address = document.createElement('a');
+  const followers = document.createElement('p');
+  const following = document.createElement('p');
+  const bio = document.createElement('p');
+  
+  image.src = Obj.avatar_url;
+  name.textContent = Obj.name;
+  username.textContent = Obj.login;
+  location.textContent = `Location: ${Obj.location}`;
+  profile.textContent = 'Profile:'
+  address.href = Obj.html_url;
+  address.textContent = Obj.html_url;
+  followers.textContent = `Followers: ${Obj.followers}`;
+  following.textContent = `Following: ${Obj.following}`;
+  bio.textContent = `Bio: ${Obj.bio}`;
+
+  div_card.classList.add("card");
+  div_cardinfo.classList.add("card-info");
+  name.classList.add("name");
+  username.classList.add("username");
+
+  div_card.appendChild(image);
+  div_card.appendChild(div_cardinfo);
+  profile.appendChild(address);
+  div_cardinfo.appendChild(name);
+  div_cardinfo.appendChild(username);
+  div_cardinfo.appendChild(location);
+  div_cardinfo.appendChild(profile);
+  div_cardinfo.appendChild(followers);
+  div_cardinfo.appendChild(following);
+  div_cardinfo.appendChild(bio);
+
+  return div_card
+}
+
+followersArray.forEach(item => {
+  const URL = `https://api.github.com/users/${item}`
+  axios
+    .get(URL)
+    .then((res) => {
+      const received = res.data
+      const newGitCard = gitCardMaker(received);
+      cardEntry.appendChild(newGitCard);
+    })
+
+})
